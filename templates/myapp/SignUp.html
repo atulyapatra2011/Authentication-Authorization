@@ -1,0 +1,52 @@
+{%load crispy_forms_tags %}
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User SignUp Form</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+</head>
+<body>
+    <style>
+        h3,input,form,button,h5{
+            font-family: consols;
+        }
+    </style>
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-6">
+                {% for msg in messages %}
+                    {% if msg.tags == "success" %}
+                        <div class="alert alert-success" id="success-alert">
+                            <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong>Success!</strong>
+                            {{ msg }}
+                        </div>
+                    {% elif msg.tags == "error" %}
+                        <div class="alert alert-danger" id="danger-alert">
+                            <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong>Wrong!</strong>
+                            {{ msg }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <h3 class="text-info">SignUp Form</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ signup| crispy }}
+                    <button class="btn btn-danger btn-block" id="myWish">SignUp</button>
+                </form>
+                <h5 class="text-danger mt-3">If you are already signup please click <a href="{% url 'login' %}">here</a></h5>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+    
+</body>
+</html>
