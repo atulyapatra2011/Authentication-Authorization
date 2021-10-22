@@ -1,10 +1,12 @@
 from django.shortcuts import redirect, render ,redirect
-from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User , Group
 from app.forms import Registration_Form,Login_Form
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.hashers import make_password
+from .models import Student
 
 # Create your views here.
 
@@ -24,6 +26,8 @@ def SignUp(request):
                 if signup_data:
                     signup_data.password = make_password(signup_data.password)
                     signup_data.save()
+                    group_data = Group.objects.get(name="Newer")
+                    signup_data.groups.add(group_data)
                     messages.success(request,'Successfully data register..')
                 else:
                     messages.error(request,'give me valid information..')
@@ -73,8 +77,20 @@ def logout_view(request):
     return redirect(reverse('login'))
 
 def home(request):
-    return render(request,'myapp/home.html')
+    if request.user.is_authenticated:
+        return render(request,'myapp/home.html',{'user':request.user})
+    return HttpResponseRedirect('/login/')
 
+def view_users(request):
+    if request.user.is_authenticated:
+        if request.method == 'GET':
+            user = User.objects.order_by('id').all()
+        else:
+            messages.warning(request,'Data Not Found')
+        dict = {'user':user}
+        return render(request,'myapp/users.html',dict)  
+    else:
+        return HttpResponseRedirect('/login/')
 
 def user_delete(request,id):
     if request.method == "GET":
@@ -85,10 +101,13 @@ def user_delete(request,id):
         messages.warning(request,'Unable to Delete user data')
     return redirect(reverse('user_list'))
 
-def view_users(request):
-    if request.method == "GET":
-        users = User.objects.order_by('id').all()
+def view_student(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            student = Student.objects.order_by('stu_id').all()
+        else:
+            messages.warning(request,'Data Not Found')
+        dict = {'student':student}
+        return render(request,'myapp/student.html',dict)
     else:
-        messages.warning(request,'Data Not Found')
-    dict = {'user':users}
-    return render(request,'myapp/users.html',dict)
+        return HttpResponseRedirect('/login/')

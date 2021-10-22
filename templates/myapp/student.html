@@ -1,7 +1,7 @@
 {% extends 'myapp/Dashboard.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
-{% block title }User List{% endblock }
+{% block title }Student List{% endblock }
 <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 <script src="{% static 'js/jquery.js'  %}"></script>
 <script src="{% static 'js/bootstrap.js' %}"></script>
@@ -32,49 +32,44 @@
                         </div>
                     {% endif %}
             {% endfor %}
-            {% if perms.app.view_user %}
-            <h4 class="text-info">All User List</h4>
+            {% if perms.app.view_student %}
+            <h4 class="text-info">All Student List</h4>
             <table class="table table-bordered">
                 <thead>
                     <tr class="text-center" style="background-color: rgb(245, 188, 66);">
                         <th>Edit</th>
                         <th>Delete</th>
                         <th>Id</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>UserName</th>
+                        <th>Name</th>
+                        <th>College</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for i in user %}
-                    <tr class="textcenter">
+                    {% for i in student %}
+                    <tr class="text-center" style="background-color: rgb(66, 179, 245);" >
                         <td>
-                        {% if perms.app.change_user %}
-                            <a class="btn btn-success btn-sm" href="#">Edit</a>
+                        {% if perms.app.change_student %}
+                            <a href="#" class="btn btn-success btn-sm">Edit</a></td>
                         {% else %}
                             <h6 class="text-danger">No Edit Permission</h6>
                         {% endif %}
-                        </td>
                         <td>
-                        {% if perms.app.delete_user %}
-                            <a class="btn btn-danger btn-sm" href="#">Delete</a>
+                        {% if perms.app.delete_student %}
+                            <a href="#" class="btn btn-danger btn-sm">Delete</a>
                         {% else %}
                             <h6 class="text-danger">No Delete Permission</h6>
                         {% endif %}
                         </td>
-                        <td>{{ i.id }}</td>
-                        <td>{{ i.first_name  }}</td>
-                        <td>{{ i.last_name }}</td>
-                        <td>{{ i.email }}</td>
-                        <td>{{ i.username }}</td>
+                        <td>{{ i.stu_id }}</td>
+                        <td>{{ i.stu_name }}</td>
+                        <td>{{ i.stu_college  }}</td>                       
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            {% else %}
-                <h4 class="text-danger">No Permission</h4>
-            {% endif %}
+            {% else  %}
+            <h4 class="text-danger">No Permission</h4>
+        {% endif %}
         </div>
         <div class="col-md-2"></div>
     </div>
